@@ -4,8 +4,7 @@ const Card = ({ movie }) => {
     
     const DataFormater = (date) => {
         let [yy, mm, dd] = date.split("-");
-        return [dd, mm, yy].join("/") ;
-        
+        return [dd, mm, yy].join("/");        
     }
     
     const genreFinder = () => {
@@ -76,6 +75,21 @@ const Card = ({ movie }) => {
     return genreArray.map((genre) => <li key={genre}>{genre}</li>);
 }
 
+const addStorage = () => {
+    let storedData = window.localStorage.movies ? window.localStorage.movies.split(",") : [];
+
+    if(!storedData.includes(movie.id.toString())) {
+        storedData.push(movie.id);
+        window.localStorage.movies = storedData
+    }  
+    window
+}
+
+const deleteStorage = () => {
+    let storedData = window.localStorage.movies.split(",");
+    let newData = storedData.filter((id) => id != movie.id)
+}
+
     return (
         <div className='card'>
             <img src={movie.poster_path ? "https://image.tmdb.org/t/p/original" + movie.poster_path : "./img/poster.jpg" } alt={`Affiche de ${movie.title}`} />
@@ -91,6 +105,15 @@ const Card = ({ movie }) => {
             </ul>
             {movie.overview ? <h3>Synopsis</h3> : ""}
             <p>{movie.overview}</p>
+            {movie.genre_ids ?
+             <div className='btn' onClick={() => addStorage()}>Ajouter aux coups de coeur</div>
+              : ( 
+                <div className="btn" onClick={() => {
+                    deleteStorage();
+                    window.location.reload();
+                }}>Supprimer de la liste</div>
+               ) }
+            
         </div>
     );
 };
