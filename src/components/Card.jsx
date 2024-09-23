@@ -82,12 +82,13 @@ const addStorage = () => {
         storedData.push(movie.id);
         window.localStorage.movies = storedData
     }  
-    window
+    
 }
 
 const deleteStorage = () => {
     let storedData = window.localStorage.movies.split(",");
-    let newData = storedData.filter((id) => id != movie.id)
+    let newData = storedData.filter((id) => id != movie.id);
+    window.localStorage.movies = newData
 }
 
     return (
@@ -97,10 +98,15 @@ const deleteStorage = () => {
             {movie.release_date ? 
                 <h5>Sorti le : {DataFormater(movie.release_date)}</h5> : null
             }
-            <h4>{parseInt(movie.vote_average)}/10 <span>⭐</span></h4>
+            <h4>{movie.vote_average.toFixed(1)}/10 <span>⭐</span></h4>
             <ul>
                 {
-                    movie.genre_ids ? genreFinder() : null
+                    movie.genre_ids 
+                    ? genreFinder() 
+                    : movie.genres.map((genre) =>  
+                       
+                        <li key={genre}>{genre.name}</li>
+                    )
                 }
             </ul>
             {movie.overview ? <h3>Synopsis</h3> : ""}
